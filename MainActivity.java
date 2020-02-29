@@ -1,57 +1,56 @@
 package com.example.helloworld;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Button;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
-import android.text.InputType;
-import android.util.Log;
-import android.view.View;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
-    //variable declaration for show text button
-    String w;
-    EditText txt1;
-    Button btn2;
-    WebView myWebView;
+    //Declaration of global variables
+    Button btnNext;
+    Button btnNext2;
+    float x1, x2, y1, y2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        txt1 = (EditText) findViewById(R.id.txt1);
-        btn2 = (Button) findViewById(R.id.btn2);
-        btn2.setOnClickListener(new View.OnClickListener() {
+        //button function change to page2
+        btnNext = (Button) findViewById(R.id.btn2);
+        btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                w = txt1.getText().toString();
-                Toast.makeText(MainActivity.this, w, Toast.LENGTH_SHORT).show();
-            }
-
-        });
-
-        Button button = findViewById(R.id.button1);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "hello world", Toast.LENGTH_SHORT).show();
-                //Toast.makeText(MainActivity.this, getString( R.string.msg ), Toast.LENGTH_SHORT).show();
-
+                openPage2();
             }
         });
 
-        myWebView = (WebView) findViewById(R.id.webview1);
-        WebSettings webSettings = myWebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        myWebView.loadUrl("https://www.google.co.uk");
+        btnNext2 =(Button) findViewById(R.id.btnPage3);
+        btnNext2.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               openPage3();
+           }
+        });
+}
+    //function to run activity to change page 2
+    public void openPage2() {
+        Intent intent = new Intent(this, Page2.class);
+        startActivity(intent);
 
     }
+    //function to run activity to change page 3
+    public void openPage3() {
+        Intent intent = new Intent(this, Page3.class);
+        startActivity(intent);
+    }
+    
 
 }
 
