@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Shop extends AppCompatActivity {
     int Score;
+    int perks;
     boolean multiplier;
     Button btnb;
     Button btnTimes2;
@@ -38,10 +40,16 @@ public class Shop extends AppCompatActivity {
         btnTimes2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Score -=20;
-                multiplier = true;
-                txtPrint = (TextView) findViewById(R.id.txtOut);
-                txtPrint.setText("" + Score);
+                if (Score <= 0) {
+                    btnTimes2.setEnabled(false);
+                    Toast.makeText(Shop.this, "out of score points", Toast.LENGTH_SHORT).show();
+                } else {
+                    Score -=20;
+                    perks += 2;
+                    multiplier = true;
+                    txtPrint = (TextView) findViewById(R.id.txtOut);
+                    txtPrint.setText("" + Score);
+                }
             }
         });
     }
@@ -50,6 +58,7 @@ public class Shop extends AppCompatActivity {
         Intent back = new Intent(Shop.this, MainActivity.class);
         back.putExtra("B", Score);
         back.putExtra("P", multiplier);
+        back.putExtra("perk", perks);
         startActivity(back);
     }
 }

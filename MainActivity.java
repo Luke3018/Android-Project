@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnL;
     TextView txtOut;
     int Score = 0;
+    int perks;
     boolean multiplier = false;
     public static final String SHARED_PREFS = "sharedPrefs";
 
@@ -33,8 +34,12 @@ public class MainActivity extends AppCompatActivity {
         savedata();
 
         //intent to see if the shop has been opened.
-        Intent Iintent = getIntent();
-        multiplier = Iintent.getBooleanExtra("P", false);
+        Intent Pintent = getIntent();
+        multiplier = Pintent.getBooleanExtra("P", false);
+
+        //Intent perkIntent = getIntent();
+        //perks = perkIntent.getIntExtra("perk", 0);
+
 
         //set lable to to txtout.
         txtOut = (TextView) findViewById(R.id.txtScore);
@@ -56,12 +61,17 @@ public class MainActivity extends AppCompatActivity {
                 //if statement to increase the score and check the shop.
                 if (multiplier) {
                     Back(); //call get score from shop class.
-                    Score ++;
+                    ScorePerks();
+                    Score += perks;
                     txtOut.setText("" + Score);
                     savedata(); //call save intent to save score in shared preference.
                     multiplier = false; //set to false to run next time.
+                } else if (Score >= 0 && perks == 0) {
+                    Score ++;
+                    txtOut.setText("" + Score);
+                    savedata();
                 } else {
-                    Score++;
+                    Score+= perks;
                     txtOut.setText("" + Score);
                     //Toast.makeText(MainActivity.this, "" + Score,Toast.LENGTH_SHORT).show();
                     savedata();
@@ -102,7 +112,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences save = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = save.edit();
         editor.putInt("Points", Score);
-        editor.commit();
+        editor.putInt("Perks", perks);
+        editor.apply();
 
     }
 
@@ -110,8 +121,12 @@ public class MainActivity extends AppCompatActivity {
     public void load() {
         SharedPreferences unLoad = getPreferences(MODE_PRIVATE);
         Score = unLoad.getInt("Points", 0);
+        perks = unLoad.getInt("Perks", 0);
+    }
 
-
+    public void ScorePerks() {
+        Intent perkIntent = getIntent();
+        perks = perkIntent.getIntExtra("perk", 0);
     }
 
 
