@@ -27,6 +27,8 @@ public class Shop extends AppCompatActivity {
         Intent intent = getIntent();
         Score = intent.getIntExtra("key", 0);
 
+        load();
+
         //back to main class an subtract form score.
         btnb = (Button) findViewById(R.id.btnBack);
         btnb.setOnClickListener(new View.OnClickListener() {
@@ -40,15 +42,18 @@ public class Shop extends AppCompatActivity {
         btnTimes2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Intent PerkIntent = getIntent();
+                //perks = PerkIntent.getIntExtra("PP", 0);
                 if (Score <= 0) {
                     btnTimes2.setEnabled(false);
                     Toast.makeText(Shop.this, "out of score points", Toast.LENGTH_SHORT).show();
                 } else {
-                    Score -=20;
                     perks += 2;
+                    Score -=20;
                     multiplier = true;
                     txtPrint = (TextView) findViewById(R.id.txtOut);
-                    txtPrint.setText("" + Score);
+                    txtPrint.setText("" + Score + " " + perks);
+                    SavePerks();
                 }
             }
         });
@@ -60,5 +65,17 @@ public class Shop extends AppCompatActivity {
         back.putExtra("P", multiplier);
         back.putExtra("perk", perks);
         startActivity(back);
+    }
+
+    public void SavePerks() {
+        SharedPreferences save = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = save.edit();
+        editor.putInt("save", perks);
+        editor.apply();
+    }
+
+    public void load() {
+        SharedPreferences unload = getPreferences(MODE_PRIVATE);
+        perks = unload.getInt("save", 0);
     }
 }

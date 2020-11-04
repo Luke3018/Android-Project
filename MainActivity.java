@@ -37,12 +37,11 @@ public class MainActivity extends AppCompatActivity {
         Intent Pintent = getIntent();
         multiplier = Pintent.getBooleanExtra("P", false);
 
-        //Intent perkIntent = getIntent();
-        //perks = perkIntent.getIntExtra("perk", 0);
-
-
         //set lable to to txtout.
         txtOut = (TextView) findViewById(R.id.txtScore);
+
+        Intent intent = getIntent();
+        perks = intent.getIntExtra("perk", 0);
 
         //button to reset the score for test proposes.
         btnR = (Button) findViewById(R.id.btnReset);
@@ -58,10 +57,15 @@ public class MainActivity extends AppCompatActivity {
         btnup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //stop score being negative.
+                if (Score <= 0) {
+                    Score = 0;
+                    txtOut.setText("" + Score);
+                }
+
                 //if statement to increase the score and check the shop.
                 if (multiplier) {
                     Back(); //call get score from shop class.
-                    ScorePerks();
                     Score += perks;
                     txtOut.setText("" + Score);
                     savedata(); //call save intent to save score in shared preference.
@@ -98,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
     public void openShop() {
         Intent intent = new Intent(MainActivity.this, Shop.class);
         intent.putExtra("key", Score);
+        //intent.putExtra("PP", perks);
         startActivity(intent);
     }
 
@@ -112,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences save = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = save.edit();
         editor.putInt("Points", Score);
-        editor.putInt("Perks", perks);
         editor.apply();
 
     }
@@ -121,14 +125,5 @@ public class MainActivity extends AppCompatActivity {
     public void load() {
         SharedPreferences unLoad = getPreferences(MODE_PRIVATE);
         Score = unLoad.getInt("Points", 0);
-        perks = unLoad.getInt("Perks", 0);
     }
-
-    public void ScorePerks() {
-        Intent perkIntent = getIntent();
-        perks = perkIntent.getIntExtra("perk", 0);
-    }
-
-
-
 }
